@@ -1,0 +1,32 @@
+# macOS
+.DS_Store
+
+# IDE / Editor
+.idea/
+.vscode/
+*.iml
+
+# Java / Maven build outputs
+**/target/
+**/out/
+*.class
+
+# Logs
+logs/
+*.log
+
+# Local runtime folders
+.run/
+
+# Local backup docs
+README.backup-20260418.md
+
+# Frontend static pages (do not publish)
+gateway-service/src/main/resources/static/
+
+# OS / temp
+*.swp
+*.swo
+*~
+
+

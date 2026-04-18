@@ -1,0 +1,28 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: alarm-service
+          uri: lb://alarm-service
+          predicates:
+            - Path=/api/alarm/**
+          filters:
+            - StripPrefix=2
+        - id: admin-service
+          uri: lb://admin-service-http
+          predicates:
+            - Path=/api/workorder/admin/**
+          filters:
+            - StripPrefix=2
+        - id: workorder-service
+          uri: lb://workorder-service-http
+          predicates:
+            - Path=/api/workorder/**
+          filters:
+            - StripPrefix=2
+        - id: notification-service
+          uri: lb://notification-service
+          predicates:
+            - Path=/api/notification/**
+          filters:
+            - StripPrefix=2

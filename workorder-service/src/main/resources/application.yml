@@ -1,0 +1,63 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: workorder-service
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/alert_center?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  redis:
+    host: 127.0.0.1
+    port: 6379
+  cache:
+    type: redis
+  cloud:
+    nacos:
+      username: nacos
+      password: nacos
+      discovery:
+        server-addr: 127.0.0.1:8848
+        service: workorder-service-http
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml
+
+security:
+  jwt:
+    secret: ChangeThisSecretToAtLeast32Bytes!!
+    expire-minutes: 120
+
+rocketmq:
+  name-server: 127.0.0.1:9876
+  producer:
+    group: workorder-producer-group
+
+dubbo:
+  application:
+    name: workorder-service
+    qos-port: 22224
+    qos-accept-foreign-ip: false
+  protocol:
+    name: dubbo
+    port: ${DUBBO_PROTOCOL_PORT:-1}
+  registry:
+    address: nacos://127.0.0.1:8848
+    parameters:
+      username: nacos
+      password: nacos
+
+workorder:
+  retry:
+    enabled: true
+    timeout-minutes: 5
+    scan-fixed-delay-ms: 60000
+  notification:
+    cooldown:
+      enabled: true
+      minutes: 30

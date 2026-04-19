@@ -6,10 +6,9 @@ A lightweight microservice platform for refrigeration device alarms and work ord
 
 This project uses Spring Cloud Alibaba and event-driven services to process alarms end-to-end:
 
-1. Alarm is triggered through the gateway API.
-2. `alarm-service` aggregates/escalates alarm severity and publishes an event.
-3. `workorder-service` consumes the event, creates a work order, and publishes a notification event.
-4. `notification-service` consumes notification events and performs mock delivery.
+1. `alarm-service` aggregates/escalates alarm severity and publishes an event.
+2. `workorder-service` consumes the event, creates a work order, and publishes a notification event.
+3. `notification-service` consumes notification events and performs mock delivery.
 
 ## Modules
 
@@ -53,9 +52,19 @@ View logs:
 ./scripts/logs.sh
 ```
 
+## Agent Service
+
+`agent-service` provides AI assistant capabilities for operations scenarios, including RAG retrieval, session memory, and tool-calling.
+
+- Default port: `9900`
+- Main responsibilities:
+	- Document retrieval and QA based on vector search
+	- Chat session management
+	- Tool execution for metrics, logs, and internal docs
+
 ## API Notes
 
-- Alarm trigger: `POST /api/alarm/alarm/trigger`
-- Work order list: `GET /api/workorder/workorder/list`
-- Complete work order: `POST /api/workorder/workorder/{id}/complete`
-- Agent auth/login: `POST /api/agent/auth/login`
+- Agent stream chat: `POST /api/agent/chat_stream`
+- Agent chat: `POST /api/agent/chat`
+- Clear agent session: `POST /api/agent/chat/clear`
+- Upload documents for indexing: `POST /api/agent/upload`

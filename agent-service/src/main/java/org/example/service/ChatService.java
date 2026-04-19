@@ -14,8 +14,6 @@ import com.alibaba.cloud.ai.graph.skills.registry.SkillRegistry;
 import com.alibaba.cloud.ai.graph.skills.registry.filesystem.FileSystemSkillRegistry;
 import org.example.agent.tool.DateTimeTools;
 import org.example.agent.tool.InternalDocsTools;
-import org.example.agent.tool.QueryLogsTools;
-import org.example.agent.tool.QueryMetricsTools;
 import org.example.agent.tool.RefrigerationDataTools;
 import org.example.agent.tool.WorkOrderTools;
 import org.example.service.ChatSessionService.ChatSessionRecord;
@@ -54,12 +52,6 @@ public class ChatService {
 
     @Autowired
     private DateTimeTools dateTimeTools;
-
-    @Autowired
-    private QueryMetricsTools queryMetricsTools;
-
-    @Autowired
-    private QueryLogsTools queryLogsTools;
 
     @Autowired
     private RefrigerationDataTools refrigerationDataTools;
@@ -196,7 +188,7 @@ public class ChatService {
      * 统一使用本地工具实现
      */
     public Object[] buildMethodToolsArray() {
-        return new Object[]{dateTimeTools, internalDocsTools, queryMetricsTools, queryLogsTools, workOrderTools};
+        return new Object[]{dateTimeTools, internalDocsTools, workOrderTools};
     }
 
     private ToolCallbackProvider[] buildToolCallbackProviders() {

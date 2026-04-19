@@ -60,7 +60,7 @@ View logs:
 - Main responsibilities:
 	- Document retrieval and QA based on vector search
 	- Chat session management
-	- Tool execution for metrics, logs, and internal docs
+	- Tool execution for workoder management and refrigeration data summarization.
 
 ## API Notes
 

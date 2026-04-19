@@ -1,0 +1,142 @@
+server:
+  port: 9900
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+file:
+  upload:
+    path: ./uploads
+    allowed-extensions: txt,md
+
+milvus:
+  host: localhost
+  port: 19530
+  username: ""
+  password: ""
+  database: default
+  timeout: 10000
+  vector-dim: ${MILVUS_VECTOR_DIM:1536}
+
+# Spring AI Alibaba DashScope 配置
+spring:
+  application:
+    name: agent-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_ADDR:127.0.0.1:8848}
+        username: ${NACOS_USERNAME:}
+        password: ${NACOS_PASSWORD:}
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: ${REDIS_DB:0}
+  ai:
+    dashscope:
+      api-key: ${DASHSCOPE_API_KEY:your-api-key-here}  # 从环境变量读取或使用默认值
+      chat:
+        options:
+          model: ${DASHSCOPE_CHAT_MODEL:qwen-plus}  # 对话模型（可通过环境变量覆盖）
+          timeout: 180000  # 超时时间180秒（3分钟）
+      retry:
+        max-attempts: 3  # 最大重试次数
+        backoff:
+          initial-interval: 2000  # 初始重试间隔2秒
+          multiplier: 2  # 重试间隔倍数
+          max-interval: 10000  # 最大重试间隔10秒
+    # 需要启用联网搜索时，将 MCP_WEB_SEARCH_ENABLED 设为 true，并提供 BAILIAN_WEB_SEARCH_MCP_URL
+    # 如控制台返回的 MCP 不是 /mcp，可通过 BAILIAN_WEB_SEARCH_MCP_ENDPOINT 覆盖默认值
+    mcp:
+      client:
+        enabled: ${MCP_WEB_SEARCH_ENABLED:true}
+        name: super-biz-agent-web-search
+        version: 1.0.0
+        type: SYNC
+        request-timeout: 60s
+        toolcallback:
+          enabled: true
+        streamable-http:
+          connections:
+            web-search:
+              url: ${BAILIAN_WEB_SEARCH_MCP_URL:https://dashscope.aliyuncs.com}
+              endpoint: ${BAILIAN_WEB_SEARCH_MCP_ENDPOINT:/api/v1/mcps/WebSearch/mcp}
+
+# 阿里云 DashScope Embedding API 配置
+dashscope:
+  api:
+    key: ${DASHSCOPE_API_KEY:your-api-key-here}  # 从环境变量读取或使用默认值（用于自定义配置）
+  embedding:
+    model: ${DASHSCOPE_EMBEDDING_MODEL:qwen3-vl-embedding}  # 支持 vl 模型，服务会自动切换到 Multimodal Embedding API
+    dimension: ${DASHSCOPE_EMBEDDING_DIMENSION:${MILVUS_VECTOR_DIM:1536}}  # 与 Milvus 向量维度保持一致
+    # model: "text-embedding-v2"  # 文本向量化模型示例
+
+# 文档分片配置
+document:
+  chunk:
+    max-size: 800  # 每个分片最大字符数
+    overlap: 100   # 分片之间的重叠字符数
+
+# RAG 配置
+rag:
+  top-k: 3  # 检索返回的最相似文档数量
+  model: "glm-5"  # 大语言模型名称
+  query-rewrite:
+    enabled: true
+    model: "qwen3.5-122b-a10b"
+    max-length: 200
+  hybrid:
+    enabled: true
+    bm25-corpus-limit: 2000
+    vector-candidate-multiplier: 3
+    rrf-k: 60
+  rerank:
+    enabled: true
+    model: "qwen3-vl-rerank"
+    candidate-multiplier: 3
+
+# Prometheus 配置
+prometheus:
+  base-url: http://localhost:9090
+  timeout: 10  # 超时时间（秒）
+  mock-enabled: false  # 是否启用 Mock 模式（用于测试）
+
+# CLS 云日志服务配置
+cls:
+  mock-enabled: false  # 是否启用 Mock 模式（用于测试，设为 true 返回与告警关联的模拟日志数据）
+
+refrigeration:
+  mock-enabled: true  # 制冷设备数据流程是否启用 mock（MySQL 查询与 PDF 生成）
+  report:
+    output-dir: ./uploads/reports
+
+agent:
+  skills:
+    project-directory: ./.github/skills
+
+chat:
+  long-context:
+    enabled: true
+    max-tokens-before-summary: 12000
+    messages-to-keep: 20
+    keep-first-user-message: true
+    summary-prefix: "## Previous conversation summary:"
+    summary-prompt: ""
+
+dubbo:
+  application:
+    name: agent-service
+    qos-port: ${DUBBO_QOS_PORT:22229}
+    qos-accept-foreign-ip: false
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    address: nacos://${NACOS_ADDR:127.0.0.1:8848}
+    parameters:
+      username: ${NACOS_USERNAME:}
+      password: ${NACOS_PASSWORD:}

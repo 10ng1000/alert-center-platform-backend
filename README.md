@@ -17,8 +17,8 @@ This project uses Spring Cloud Alibaba and event-driven services to process alar
 - `alarm-service`: Alarm ingestion, deduplication, escalation, event publishing
 - `workorder-service`: Work order creation, idempotent consumption, retry handling
 - `notification-service`: Notification event consumer (mock)
-- `device-profile-service`: Device profile provider (Dubbo)
 - `admin-service`: Admin registration/login and device-assignee binding
+- `agent-service`: AI assistant service and agent-facing APIs
 - `common-api`: Shared DTOs, constants, RPC interfaces
 
 ## Tech Stack
@@ -53,27 +53,9 @@ View logs:
 ./scripts/logs.sh
 ```
 
-## Verification Pages
-
-- `http://127.0.0.1:8080/verify.html`
-- `http://127.0.0.1:8080/admin.html`
-
 ## API Notes
 
 - Alarm trigger: `POST /api/alarm/alarm/trigger`
 - Work order list: `GET /api/workorder/workorder/list`
 - Complete work order: `POST /api/workorder/workorder/{id}/complete`
-
-## JWT
-
-Default gateway JWT secret:
-
-`ChangeThisSecretToAtLeast32Bytes!!`
-
-Use header:
-
-`Authorization: Bearer <token>`
-
-## Backup
-
-The original README is backed up as `README.backup-20260418.md`.
+- Agent auth/login: `POST /api/agent/auth/login`

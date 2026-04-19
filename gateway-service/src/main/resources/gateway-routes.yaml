@@ -26,3 +26,10 @@ spring:
             - Path=/api/notification/**
           filters:
             - StripPrefix=2
+        - id: agent-service
+          uri: lb://agent-service
+          predicates:
+            - Path=/api/agent/**
+          filters:
+            - StripPrefix=2
+            - PrefixPath=/api

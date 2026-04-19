@@ -1,6 +1,13 @@
 package com.example.common.dto;
 
-public class WorkOrderEvent {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class WorkOrderEvent implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private String workOrderId;
     private String alarmEventId;
     private String deviceId;

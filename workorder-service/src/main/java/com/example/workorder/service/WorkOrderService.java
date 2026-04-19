@@ -86,6 +86,10 @@ public class WorkOrderService {
             return null;
         }
 
+        if (STATUS_COMPLETED.equals(entity.getStatus())) {
+            return entity;
+        }
+
         entity.setStatus(STATUS_COMPLETED);
         if (StringUtils.hasText(assignee)) {
             entity.setAssignee(assignee);
@@ -95,6 +99,7 @@ public class WorkOrderService {
         return saved;
     }
 
+    @CacheEvict(cacheNames = {"workOrderList", "workOrderById", "workOrderByStatus", "workOrderByAssignee", "workOrderByAssigneeAndStatus"}, allEntries = true)
     public WorkOrderEntity completeByAssignee(String workOrderId, String assignee) {
         if (!StringUtils.hasText(assignee)) {
             return null;

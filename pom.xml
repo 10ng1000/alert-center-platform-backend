@@ -13,7 +13,6 @@
         <module>admin-service</module>
         <module>workorder-service</module>
         <module>notification-service</module>
-        <module>device-profile-service</module>
     </modules>
 
     <properties>

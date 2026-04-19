@@ -90,11 +90,27 @@ ensure_port_free() {
   return 0
 }
 
+is_port_in_use() {
+  local host="$1"
+  local port="$2"
+  nc -z "$host" "$port" >/dev/null 2>&1
+}
+
 start_java_service() {
   local module="$1"
   local service_name="$2"
   local port="$3"
   local qos_port="${4:-}"
+
+  if is_port_in_use 127.0.0.1 "$port"; then
+    echo "[SKIP] $service_name port $port already in use, skip startup"
+    return 0
+  fi
+
+  if [[ -n "$qos_port" ]] && is_port_in_use 127.0.0.1 "$qos_port"; then
+    echo "[SKIP] $service_name qos port $qos_port already in use, skip startup"
+    return 0
+  fi
 
   local jar_path
   jar_path="$(find "$ROOT_DIR/$module/target" -maxdepth 1 -type f -name "*.jar" | grep -v "original" | head -n 1)"
@@ -114,10 +130,6 @@ start_java_service() {
     fi
   fi
 
-  if [[ -n "$qos_port" ]]; then
-    ensure_port_free 127.0.0.1 "$qos_port" "$service_name qos"
-  fi
-
   echo "[START] $service_name"
   local log_file="$LOG_DIR/$service_name.log"
   nohup java -jar "$jar_path" >"$log_file" 2>&1 &
@@ -129,7 +141,7 @@ start_java_service() {
 }
 
 echo "[STEP] Starting middleware with docker compose"
-compose_cmd up -d
+# compose_cmd up -d
 
 wait_for_port 127.0.0.1 3306 mysql
 wait_for_port 127.0.0.1 6379 redis
@@ -144,11 +156,14 @@ echo "[STEP] Building all modules"
 cd "$ROOT_DIR"
 mvn -DskipTests package
 
-start_java_service "device-profile-service" "device-profile-service" "8084" "22222"
+echo "[STEP] Building agent-service"
+mvn -DskipTests -f "$ROOT_DIR/agent-service/pom.xml" package
+
 start_java_service "admin-service" "admin-service" "8085" "22225"
 start_java_service "workorder-service" "workorder-service" "8082"
 start_java_service "alarm-service" "alarm-service" "8081" "22223"
 start_java_service "notification-service" "notification-service" "8083"
+start_java_service "agent-service" "agent-service" "9900"
 start_java_service "gateway-service" "gateway-service" "8080"
 
 echo "[DONE] Full stack started successfully"

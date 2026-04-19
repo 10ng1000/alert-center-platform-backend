@@ -26,11 +26,11 @@ stop_by_pid_file() {
 }
 
 stop_by_pid_file "gateway-service"
+stop_by_pid_file "agent-service"
 stop_by_pid_file "notification-service"
 stop_by_pid_file "workorder-service"
 stop_by_pid_file "admin-service"
 stop_by_pid_file "alarm-service"
-stop_by_pid_file "device-profile-service"
 
 # docker compose -f "$ROOT_DIR/docker-compose.yml" down
 

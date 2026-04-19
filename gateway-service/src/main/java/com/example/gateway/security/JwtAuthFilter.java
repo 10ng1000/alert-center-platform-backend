@@ -22,7 +22,11 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
             "/actuator/**",
             "/verify.html",
             "/admin.html",
+            "/agent/**",
             "/favicon.ico",
+            "/api/agent/auth/login",
+            "/api/agent/auth/register",
+            "/api/agent/auth/refresh",
             "/api/workorder/admin/register",
             "/api/workorder/admin/login"
         );

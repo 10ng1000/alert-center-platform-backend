@@ -16,7 +16,7 @@ This project uses Spring Cloud Alibaba and event-driven services to process alar
 - `gateway-service`: API gateway, routing, JWT authentication
 - `alarm-service`: Alarm ingestion, deduplication, escalation, event publishing
 - `workorder-service`: Work order creation, idempotent consumption, retry handling
-- `notification-service`: Notification event consumer (mock)
+- `notification-service`: Notification event consumer
 - `admin-service`: Admin registration/login and device-assignee binding
 - `agent-service`: AI assistant service and agent-facing APIs
 - `common-api`: Shared DTOs, constants, RPC interfaces

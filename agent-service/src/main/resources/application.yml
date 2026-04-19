@@ -54,7 +54,7 @@ spring:
     mcp:
       client:
         enabled: ${MCP_WEB_SEARCH_ENABLED:true}
-        name: super-biz-agent-web-search
+        name: agent-web-search
         version: 1.0.0
         type: SYNC
         request-timeout: 60s

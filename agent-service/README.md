@@ -1,4 +1,4 @@
-# SuperBizAgent Backend
+# ReACTAgent Backend
 
 An enterprise-oriented AI agent backend built with Spring Boot, Spring AI, DashScope, and Milvus.
 
@@ -6,7 +6,7 @@ This repository focuses on backend engineering and RAG capabilities.
 
 ## Overview
 
-SuperBizAgent Backend provides Retrieval-Augmented Generation (RAG) chat services with session memory, streaming output, and tool-calling support for operations scenarios.
+ReACTAgent Backend provides Retrieval-Augmented Generation (RAG) chat services with session memory, streaming output, and tool-calling support for operations scenarios.
 
 ## Features
 
